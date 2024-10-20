@@ -1,6 +1,7 @@
 
 # Tarea1-SO
-
+> [!NOTE]
+> Integrantes: Kevin Miranda Saéz y Daniel Monsálvez Muñoz
 > **IMPORTANTE**  
 > Para poder compilar el programa, debe descargar los archivos `tarea1.cpp` y el `Makefile`.
 
