@@ -1,3 +1,4 @@
+//Integrantes: Kevin Miranda Saéz y Daniel Monsálvez Muñoz
 #include <iostream>
 #include <thread>
 #include <vector>
