@@ -13,23 +13,23 @@ std::condition_variable cv; // Condicion variable para notificar a las hebras
 bool avanzar = false; // Bandera para indicar si un auto debe avanzar
 int autoSeleccionado = -1; // ID del auto seleccionado para avanzar
 bool carreraTerminada = false; // Bandera para indicar que la carrera ha terminado
-bool choquesHabilitados = false; // Bandera para indicar si los choques est谩n habilitados
+bool choquesHabilitados = false; // Bandera para indicar si los choques estan habilitados
 
 // Emojis para los autos y choques
-const std::string EMOJI_AUTO = "馃殫";
-const std::string EMOJI_CHOQUE = "馃敟馃殫馃敟";
+const std::string EMOJI_AUTO = "🚗";
+const std::string EMOJI_CHOQUE = "🔥🚗🔥";
 
-// Funci贸n para generar colores infinitos
+// Funcion para generar colores infinitos
 std::string generarColor(int id) {
     int colorCode = 31 + (id % 7); // Genera colores del 31 al 36, con un ciclo infinito
     return "\033[" + std::to_string(colorCode) + "m";
 }
 
-// Funci贸n para imprimir el estado actual de la carrera
+// Funcion para imprimir el estado actual de la carrera
 void imprimirProgreso(const std::vector<int>& distancias, int M, int N, const std::vector<bool>& autosChocados) {
     std::cout << "\nEstado de la carrera:\n";
     for (size_t i = 0; i < distancias.size(); ++i) {
-        std::string color = generarColor(i); // Generar color din谩mico
+        std::string color = generarColor(i); // Generar color dinamico
         std::cout << color << "Auto" << i << ": ";
         int progreso = static_cast<int>(50.0 * distancias[i] / M); // Escalar la distancia a una barra de 50 caracteres
 
@@ -40,7 +40,7 @@ void imprimirProgreso(const std::vector<int>& distancias, int M, int N, const st
 
         // Mostrar el emoji de choque solo si el auto ha chocado
         if (autosChocados[i]) {
-            std::cout << EMOJI_CHOQUE;  // Reemplazar el auto por el emoji de choque
+            std::cout << EMOJI_CHOQUE;  // Reemplazar auto por el emoji de choque
         } else {
             std::cout << EMOJI_AUTO;  // Mostrar el emoji del auto
         }
@@ -55,16 +55,16 @@ void carreraAuto(int id, int M, std::vector<int>& distancias, std::vector<int>& 
         std::unique_lock<std::mutex> lock(mtx);
         cv.wait(lock, [&] { return avanzar && autoSeleccionado == id || carreraTerminada; });
 
-        if (carreraTerminada) break; // Si la carrera ha terminado, salir del bucle
+        if (carreraTerminada) break; // Si la carrera terminó, salir del bucle
 
-        // Verificar si el auto ya choc贸
+        // Verificar si el auto chocó
         if (autosChocados[id]) {
             avanzar = false;
             cv.notify_all();
             continue; // Saltar este auto si ha chocado
         }
 
-        // Verificar si el auto choca (probabilidad del 1%), solo si los choques est谩n habilitados
+        // Verificar si el auto choca (probabilidad del 1%), solo si los choques estan habilitados
         if (choquesHabilitados && distChoque(gen) == 1) {
             autosChocados[id] = true;  // Marcar el auto como chocado
             std::cout << generarColor(id) << "Auto" << id << " ha chocado! Estado: " << EMOJI_CHOQUE << "\033[0m" << std::endl;
@@ -96,7 +96,7 @@ int main(int argc, char* argv[]) {
     }
 
     int M = std::stoi(argv[1]); // Distancia total de la carrera
-    int N = std::stoi(argv[2]); // N煤mero de autos
+    int N = std::stoi(argv[2]); // Numero de autos
 
     // Si se ha pasado un tercer argumento y es "1", habilitar los choques
     if (argc == 4 && std::stoi(argv[3]) == 1) {
@@ -112,7 +112,7 @@ int main(int argc, char* argv[]) {
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> distAvance(1, 10);
     std::uniform_int_distribution<> distAuto(0, N - 1);
-    std::uniform_int_distribution<> distChoque(1, 100); // Distribuci贸n para el choque (1% de probabilidad)
+    std::uniform_int_distribution<> distChoque(1, 100); // Distribucion para el choque (1% de probabilidad)
 
     std::vector<std::thread> threads;
     for (int i = 0; i < N; ++i) {
@@ -138,7 +138,7 @@ int main(int argc, char* argv[]) {
         // Imprimir el estado actual de la carrera
         imprimirProgreso(distancias, M, N, autosChocados);
 
-        // Esperar un intervalo de tiempo aleatorio antes de la siguiente iteraci贸n
+        // Esperar un intervalo de tiempo aleatorio antes de la siguiente iteracion
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 
